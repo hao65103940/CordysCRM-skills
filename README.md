@@ -24,11 +24,25 @@ CordysCRM-skills/
     └── crm-api.md         # API 字段和请求体 RFC
 ```
 
-## 快速开始
+## 🚀 快速开始
 
-1. `clawdhub install cordys-crm`
-2. 把 `bin/cordys` 加入 PATH，或在调用前 `cd /Users/…/CordysCRM-skills && ./bin/cordys`
-3. 在项目根目录创建 `.env`
+### 方式一：通过 ClawdHub 安装（推荐）
+
+```bash
+clawdhub install cordys-crm
+```
+
+### 方式二：手动安装
+
+#### 克隆仓库
+
+```bash
+git clone https://github.com/1Panel-dev/CordysCRM-skills ~/.openclaw/skills/cordys-crm
+```
+
+### 创建环境变量文件
+
+在项目根目录创建 `.env` 文件：
 
 ```ini
 CORDYS_ACCESS_KEY=你的 Access Key

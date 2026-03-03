@@ -11,10 +11,13 @@
 | `lead` | 潜在客户（线索）记录，用于销售团队初步跟进。|
 | `account` | 客户/公司基础信息，包含行业、地点、负责人等。|
 | `opportunity` | 商机（机会）记录，表示销售流程中的具体案子。|
+| `contract` | 合同及其回款、发票等子资源，用于追踪签署后的收款与交付状态。|
 | `pool` | 公共资源池（可选），用于共享线索或商机。|
 | 其他模块 | 可以根据 API 文档继续扩展，如 `task`、`contact`、`product` 等。|
 
 你在自然语言中提到的模块名，扭转成命令时就能直接定位到本文档中所列的模块。
+
+`contract` 模块还有几个常用的二级资源：`contract/payment-plan`（回款计划）、`invoice`、`contract/business-title`（工商抬头）、`contract/payment-record` 以及 `opportunity/quotation`，CLI 仍然沿用 `page`/json 的方式访问它们。
 
 ---
 

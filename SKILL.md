@@ -19,12 +19,22 @@ description: |
 
 ## CLI 版本选择
 
-本项目提供两个版本的 CLI 工具：
+# CLI 版本选择（优先 Shell）
 
-- **Python 版本**（`cordys.py`）：推荐使用，跨平台兼容性好，需要 Python 3 和 requests 库
-- **Shell 版本**（`cordys`）：传统 bash 脚本，适合纯 Unix/Linux 环境
+本项目提供两个版本 CLI：
 
-两个版本功能完全相同，命令格式一致。下文示例使用 `cordys.py`，如使用 Shell 版本请替换为 `cordys`。
+| 版本 | 推荐程度 | 说明 |
+|----|----|----|
+| **Shell 版本 `cordys`** |  推荐 | 无需 Python，执行更轻量 |
+| Python 版本 `cordys.py` | 备用 | 需要 Python3 + requests |
+
+**默认优先使用 Shell 版本。**
+
+Python 版本仅在以下情况使用：
+
+- 系统不支持 Bash
+- Windows 环境
+- Shell CLI 不可用
 
 ## 基本流程
 1. 明确意图：列出/搜索/获取/跟进。
@@ -34,42 +44,42 @@ description: |
 5. 说明期望的输出形式（简短摘要/全部字段/只要某字段）。
 
 ## 指令映射（常用）
-| 场景 | 建议命令 | 备注 |
-| --- | --- | --- |
-| 列表或分页查看 | `python3 bin/cordys.py crm page <module> ["keyword"]` | 若用户只提关键词，会自动构造 `{keyword:..., current:1, pageSize:30}` |
-| 搜索 | `python3 bin/cordys.py crm search <module> <JSON body>` | 需 `combineSearch`、`filters`、`sort`，可补全默认值 |
-| 详情 | `python3 bin/cordys.py crm get <module> <id>` | 直接拉取记录 |
-| 跟进计划/记录 | `python3 bin/cordys.py crm follow plan|record <module> <body>` | `body` 应包含 `sourceId`，计划还需要 `status`/`myPlan` |
-| 原始接口 | `python3 bin/cordys.py raw <METHOD> <PATH> [<body>]` | 用于自定义端点或二级模块，如 `/contract/payment-plan` |
+| 场景      | 建议命令                                              | 备注                                                     |
+|---------|---------------------------------------------------|--------------------------------------------------------|
+| 列表或分页查看 | `cordys crm page <module> ["keyword"]`            | 若用户只提关键词，会自动构造 `{keyword:..., current:1, pageSize:30}` |
+| 搜索      | `cordys crm search <module> <JSON body>`          | 需 `combineSearch`、`filters`、`sort`，可补全默认值              |
+| 详情      | `cordys crm get <module> <id>`                    | 直接拉取记录                                                 |
+| 跟进计划或记录 | `cordys crm follow plan 或 record <module> <body>` | `body` 应包含 `sourceId`，计划还需要 `status`/`myPlan` |
+| 原始接口    | `cordys raw <METHOD> <PATH> [<body>]`             | 用于自定义端点或二级模块，如 `/contract/payment-plan`                |
 
 ## 高级技巧
 - 搜索命令需要完整 JSON，若用户只给关键词或简单条件，可自动补齐 `current=1`、`pageSize=30`、`combineSearch={...}`。
 - 过滤器格式为 `{"field":"字段","operator":"equals","value":"值"}`，排序格式为 `{"field":"desc"}`。
-- 支持二级模块（例如 `contract/payment-plan`、`contract/payment-record`），CLI 命令形式仍为 `python3 bin/cordys.py crm page <module>`。
-- `python3 bin/cordys.py raw` 可以按原始 GET/POST 访问 `/settings/fields`、`/contract/business-title` 等非标准接口。
+- 支持二级模块（例如 `contract/payment-plan`、`contract/payment-record`），CLI 命令形式仍为 `cordys crm page <module>`。
+- `cordys raw` 可以按原始 GET/POST 访问 `/settings/fields`、`/contract/business-title` 等非标准接口。
 
 ## 常用示例
 ```bash
 # 分页列表（带关键词）
-python3 bin/cordys.py crm page lead "测试"
+cordys crm page lead "测试"
 
 # 搜索（完整 JSON）
-python3 bin/cordys.py crm search opportunity '{"current":1,"pageSize":30,"combineSearch":{"searchMode":"AND","conditions":[]},"keyword":"电力","filters":[]}'
+cordys crm search opportunity '{"current":1,"pageSize":30,"combineSearch":{"searchMode":"AND","conditions":[]},"keyword":"电力","filters":[]}'
 
 # 跟进计划
-python3 bin/cordys.py crm follow plan account '{"sourceId":"123","current":1,"pageSize":10,"status":"UNFINISHED","myPlan":false}'
+cordys crm follow plan account '{"sourceId":"123","current":1,"pageSize":10,"status":"UNFINISHED","myPlan":false}'
 
 # 原始 API 调用
-python3 bin/cordys.py raw GET /settings/fields?module=account
+cordys raw GET /settings/fields?module=account
 
 # 获取组织架构
-python3 bin/cordys.py crm org
+cordys crm org
 
 # 查询产品
-python3 bin/cordys.py crm product "测试产品"
+cordys crm product "测试产品"
 
 # 获取联系人
-python3 bin/cordys.py crm contact account "927627065163785"
+cordys crm contact account "927627065163785"
 ```
 
 ## 环境变量（必须）

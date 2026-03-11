@@ -1,139 +1,247 @@
-# Cordys CRM 技能 for OpenClaw
+# Cordys CRM Skill for OpenClaw
 
-像与人交谈一样与你的 Cordys CRM 工作区交互。商机、联系人、潜在客户 — 全部通过自然对话与你的 AI 助手完成。
+像与人交谈一样与你的 **Cordys CRM 工作区**交互。  
+商机、联系人、潜在客户 —— 全部通过自然对话与你的 AI 助手完成。
 
-这个技能把 Cordys CRM CLI 包装在 OpenClaw 会话里：你说，助手听、解析、把意图映射到 Cordys CRM 命令，再把结果返回给你。
+这个 Skill 将 **Cordys CRM CLI** 包装进 **OpenClaw 会话环境**：
 
-借助 Prompt 的动态调优机制，用户可以在不修改任何底层代码的情况下，灵活控制 OpenClaw 的输出格式、筛选逻辑和分页规则，让 AI 更贴合实际业务需求，显著提升交互效率与使用体验。
+1. 你用自然语言描述需求
+2. AI 解析意图
+3. 自动转换为 `cordys` CLI 命令
+4. 执行 API 请求并返回结果
 
-## 为什么这个技能有用
+借助 Prompt 的动态调优机制，用户可以在 **不修改任何代码**的情况下控制：
 
-| 系统视角 | 用户意图 | 输出形式 |
-| --- | --- | --- |
-| 👂 监听自然语言 | 提供关键信息（模块、操作、条件、字段） | ⚙️ 转换为 `cordys` CLI、原始 API 或更复杂的 JSON 请求 |
-| 📦 简化重复任务 | 需要分页、搜索、创建/更新/删除记录 | ✅ 直接执行并返回结果 |
-| 📊 同步报告 | 希望定期看销售管道、潜在客户、客户活动 | 🕓 可与 cron 或脚本组合 |
+- 输出格式
+- 过滤条件
+- 排序规则
+- 分页逻辑
 
-## 项目结构
+从而让 AI 更贴合真实 CRM 业务场景。
+
+---
+
+# 为什么这个 Skill 有用
+
+| 系统视角 | 用户意图 | 输出 |
+|---|---|---|
+| 👂 监听自然语言 | 提供模块 / 条件 / 字段 | ⚙️ 转换为 CLI / API 请求 |
+| 📦 简化重复任务 | 分页 / 搜索 / CRUD | ✅ 自动执行 |
+| 📊 数据同步 | 查看销售管道 / 客户数据 | 🕓 可结合 cron 自动化 |
+
+---
+
+# 项目结构
+
 ```
 CordysCRM-skills/
 ├── README.md              # 当前工程基本说明
 ├── SKILL.md               # 助手在 OpenClaw 会话里引用的 prompt/reference
-├── bin/
-│   ├── cordys             # Shell 版本 CLI（bash）
-│   └── cordys.py          # Python 版本 CLI（推荐）
+├── bin/cordys             # 内置 CLI，可直接试用
 └── references/
     └── crm-api.md         # API 字段和请求体 RFC
 ```
 
-## 🚀 快速开始
-
-### 方式一：通过 ClawdHub 安装（推荐）
+通过 **ClawdHub** 安装
 
 ```bash
 clawdhub install cordys-crm
 ```
 
-### 方式二：手动安装
+---
 
-#### 克隆仓库
+## 方式二 手动安装
+
+### 克隆仓库
 
 ```bash
 git clone https://github.com/1Panel-dev/CordysCRM-skills ~/.openclaw/skills/cordys-crm
 ```
 
-### 创建环境变量文件
+---
 
-在项目根目录创建 `.env` 文件：
+# 配置环境变量
+
+创建 `.env`
 
 ```ini
-CORDYS_ACCESS_KEY=你的 Access Key
-CORDYS_SECRET_KEY=你的 Secret Key
-CORDYS_CRM_DOMAIN=https://{你的域名}
+CORDYS_ACCESS_KEY=你的AccessKey
+CORDYS_SECRET_KEY=你的SecretKey
+CORDYS_CRM_DOMAIN=https://你的域名
 ```
 
-### 选择 CLI 版本
+示例：
 
-项目提供了两个版本的 CLI 工具：
-
-#### Python 版本（推荐）
-
-```bash
-# 安装依赖
-pip install requests python-dotenv  # python-dotenv 可选
-
-# 使用示例
-./bin/cordys.py crm page lead
-./bin/cordys.py crm org
-./bin/cordys.py help
+```
+CORDYS_CRM_DOMAIN=https://crm.example.com
 ```
 
-**优势：**
-- 跨平台兼容性更好（Windows/macOS/Linux）
-- 代码更易维护和扩展
-- 更好的错误处理
+---
 
-#### Shell 版本（传统）
+# CLI 版本说明
+
+项目提供 **两个 CLI 实现**
+
+| CLI | 推荐场景               | 特点     |
+|---|--------------------|--------|
+| Shell CLI (`cordys`) | Linux / macOS / CI | 默认 CLI |
+| Python CLI (`cordys.py`) | 跨平台 / 复杂命令         | 灵活     |
+
+默认 **优先使用 Shell CLI**。
+
+如果 Shell CLI 不支持某些命令，会提示使用 Python CLI。
+
+---
+
+# Shell CLI（默认）
+
+无需额外依赖，仅需要 `curl`。
+
+使用示例：
 
 ```bash
-# 直接使用
 ./bin/cordys crm page lead
+./bin/cordys crm page opportunity
 ./bin/cordys crm org
 ./bin/cordys help
 ```
 
-**优势：**
-- 无需安装额外依赖（除 curl 外）
-- 适合纯 Unix/Linux 环境
+优势：
 
-### 验证安装
+- 无需 Python
+- 启动速度快
+- 适合 Linux / macOS / CI
 
-4. 运行 `cordys.py help` 或 `cordys help` 确认 CLI 可用
-5. 你也可以直接在仓库根目录运行 `./bin/cordys.py` 或 `./bin/cordys`（会继承 `.env`）来验证连接是否成功，若 domain 包含非标准路径（例如 `https://crm.example.com/api`），请在 `.env` 中完整写出。
-6. 在 OpenClaw 会话中以自然语言告诉我你想要做什么，我会把它翻译成命令
+---
 
-## CLI 常用命令
+如果命令包含复杂 JSON 或高级参数，Shell CLI 可能不支持。
 
-> 以下示例使用 Python 版本（`cordys.py`），如使用 Shell 版本请将 `cordys.py` 替换为 `cordys`
+CLI 会提示：
 
-```bash
-# 分页列表
-python3 bin/cordys.py crm page lead
-python3 bin/cordys.py crm page opportunity
-python3 bin/cordys.py crm page account
+```
+⚠️ 当前命令 Shell CLI 不支持
 
-# 支持 keyword 参数
-python3 bin/cordys.py crm page lead "测试"
+请使用 Python CLI：
 
-# 获取单条记录
-python3 bin/cordys.py crm get lead "1234567890"
-
-# 搜索（需要完整 JSON body）
-python3 bin/cordys.py crm search opportunity '{"current":1,"pageSize":30,"combineSearch":{"searchMode":"AND","conditions":[]},"keyword":"测试","filters":[]}'
-
-# 获取组织架构，需要有系统管理权限才能调用
-python3 bin/cordys.py crm org
-
-# 获取部门成员列表
-python3 bin/cordys.py crm members '{"current":1,"pageSize":50,"combineSearch":{"searchMode":"AND","conditions":[]},"keyword":"","departmentIds":["deptId1","deptId2"],"filters":[]}'
-
-# 跟进计划/记录查询
-python3 bin/cordys.py crm follow plan lead '{"sourceId":"927627065163785","current":1,"pageSize":10,"keyword":"","status":"ALL","myPlan":false}'
-python3 bin/cordys.py crm follow record account '{"sourceId":"1751888184018919","current":1,"pageSize":10,"keyword":"","myPlan":false}'
-
-# 查询 客户｜商机 联系人
-python3 bin/cordys.py crm contact opportunity '商机id'
-python3 bin/cordys.py crm contact account '客户id'
-
-# 原始 API 调用
-python3 bin/cordys.py raw GET /settings/fields?module=account
+python3 bin/cordys.py <command>
 ```
 
-## 跟进计划与记录（通用查询）
-商机、客户、潜在客户的跟进计划和跟进记录都可以复用同一套接口。
+示例：
+
+```
+cordys crm search opportunity '{...}'
+
+⚠️ 当前命令 Shell CLI 不支持
+
+请使用：
+
+python3 bin/cordys.py crm search opportunity '{...}'
+```
+
+---
+
+# Python CLI（完整版本）
+
+安装依赖：
+
 ```bash
-python3 bin/cordys.py crm follow plan <module> '{"sourceId":"<resourceId>","current":1,"pageSize":10,"keyword":"","status":"ALL","myPlan":false}'
-python3 bin/cordys.py crm follow record <module> '{"sourceId":"<resourceId>","current":1,"pageSize":10,"keyword":"","myPlan":false}'
+pip install requests python-dotenv
+```
+
+使用示例：
+
+```bash
+python3 bin/cordys.py crm page lead
+python3 bin/cordys.py crm org
+python3 bin/cordys.py help
+```
+
+优势：
+- 更好的错误处理
+- 跨平台支持
+
+---
+
+# 验证安装
+
+运行：
+
+```bash
+cordys help
+```
+
+或者
+
+```bash
+python3 bin/cordys.py help
+```
+
+如果返回帮助信息说明安装成功。
+
+---
+
+# CLI 常用命令
+
+分页列表
+
+```bash
+cordys crm page lead
+cordys crm page opportunity
+cordys crm page account
+```
+
+关键词搜索
+
+```bash
+cordys crm page lead "测试"
+```
+
+获取单条记录
+
+```bash
+cordys crm get lead "123456"
+```
+
+复杂搜索
+
+```bash
+cordys crm search opportunity '{"cupytnt":1,"pageSize":30,"keyword":"测试"}'
+```
+
+组织架构
+
+```bash
+cordys crm org
+```
+
+部门成员
+
+```bash
+cordys crm members '{"current":1,"pageSize":50,"departmentIds":["dept1"]}'
+```
+
+联系人查询
+
+```bash
+# 查询 客户｜商机 联系人
+cordys crm contact opportunity '商机id'
+cordys crm contact account '客户id'
+```
+
+原始 API
+
+```bash
+cordys raw GET /settings/fields?cordys raw GET /setting---
+```
+
+# 跟进计划与记录（通用查询）
+
+示例：
+
+```bash
+cordys crm follow plan lead '{"sourceId":"927627065163785","current":1,"pageSize":10,"keyword":"","status":"ALL","myPlan":false}'
+
+cordys crm follow record account '{"sourceId":"1751888184018919","current":1,"pageSize":10,"keyword":"","myPlan":false}'
 ```
 
 - `sourceId` 指向某条商机/客户/线索的唯一 ID，必须传入才能拉到与之关联的计划或记录；只提供 `keyword` 时只做关键字模糊搜索，无法替代 `sourceId`。
@@ -142,71 +250,74 @@ python3 bin/cordys.py crm follow record <module> '{"sourceId":"<resourceId>","cu
 
 默认情况下，如果你只提供关键词，CLI 会自动补齐分页结构（current=1、pageSize=30、sort={}、filters=[]）。
 
-## 如何告诉 AI 你的意图（让提示词更清晰）
+---
 
-| 意图类别 | 示例
-| --- | --- |
-| 列表/分页 | “帮我列出本月新增的商机，按金额排序，每页 20 条。” |
-| 全局搜索 | “搜索所有账户，关键词是‘铁塔’，只看跟进中状态。” |
-| 获取详情 | “打开编号 xxx 客户的潜在客户详情。” |
-| 跟进计划/记录 | “帮我找出 lead 9276 相关的未完成计划，按创建时间倒序。” |
+# 二级模块支持
 
-> 推荐模板：
-> 1. 明确“做什么”（列表/搜索/创建/更新/删除/跟进）
-> 2. 指定“哪个模块”（lead/account/opportunity/其他）
-> 3. 说明“条件/过滤/关键词”或要修改的字段
-> 4. 说明“分页/命令”信息（例如 `current`、`pageSize`、`follow plan` 等）
->
-> 如果要调用跟进接口，记得带上 `sourceId`，并指明是否需要 `status`-类过滤或只查看自己的计划/记录（`myPlan`）。
+Cordys CRM 部分资源属于二级模块。
 
-### 例子（Assistant 可直接转换成命令）
-- “查看本周创建的所有潜在客户，分页 30 条，按创建时间倒序。”
-- “搜索 opportunity 中名称里包含‘征信’的记录，只返回前 10 条。”
-- “把商机 112233 的阶段改为‘商务洽谈’，金额更新为 180000。”
-- “列出所有上海地区客户并导出手机号。”
-- “帮我看 lead 9276 相关的跟进记录。”
+例如：
 
-## 键值映射（提示词 → 实际命令）
-| 用户说法 | CLI/API 推理 |
-| --- | --- |
-| “列出商机” | `cordys crm page opportunity`（追加 filters/sort/keyword） |
-| “搜索账户” + “关键词” | `cordys crm search account {…}`，把关键词设置在 JSON 里 |
-| “查看 lead #ID” | `cordys crm get lead ID` |
-| “创建联系人” | `cordys crm create Contacts '{"data":[{…}]}'` |
-| “查看某条线索的跟进计划” | `cordys crm follow plan lead '{"sourceId":"...","status":"ALL"}'` |
+```
+ `cordys crm page contract/payment-plan`：查询回款计划的分页列表，支持传入关键词/JSON body，实际上调用的是 `POST /contract/payment-plan/page`。
+ `cordys crm page invoice`：查询发票的分页列表，通过 `POST /invoice/page` 获取，每个条件都可以通过 `filters` 精细控制。
+ `cordys crm page contract/business-title`：检索工商抬头列表，同样支持关键词/filters。
+ `cordys crm page contract/payment-record`：查看回款记录列表，可结合关键词、`filters` 或 `viewId` 进行精细筛选。
+```
 
-如果你是技术佬也可以直接给出 JSON body，让 OpenClaw 原样传给 `search`/`page`；也可以要求先构造基础 structure 再根据你的 “条件” 细化。
+示例：
 
-## 二级模块支持
-Cordys CRM 里有一些隐藏在 `contract` 模块下的二级资源（比如回款计划、发票等），`cordys` CLI 通过接受包含斜杠路径的模块名来访问它们。
+```bash
+cordys crm page contract/payment-plan
+```
 
-- `cordys crm page contract/payment-plan`：查询回款计划的分页列表，支持传入关键词/JSON body，实际上调用的是 `POST /contract/payment-plan/page`。
-- `cordys crm page invoice`：查询发票的分页列表，通过 `POST /invoice/page` 获取，每个条件都可以通过 `filters` 精细控制。
-- `cordys crm page contract/business-title`：检索工商抬头列表，同样支持关键词/filters。
-- `cordys crm page contract/payment-record`：查看回款记录列表，可结合关键词、`filters` 或 `viewId` 进行精细筛选。
+回款记录：
 
-对这些二级模块的查询依旧遵循 `page_payload` 结构（`current`/`pageSize`/`sort`/`filters`）和关键字补全，因此你只需提供想要筛选的字段，AI 会自动补上分页元数据。
+```bash
+cordys crm page contract/payment-record
+```
 
-需要更专业的筛选能力时，可以直接把完整 JSON body 透传给 `cordys crm page contract/payment-plan '{…}'`，也可以用 `cordys raw` 指定路径（例如 `cordys raw POST /contract/payment-record/page '{...}'`）来跳过 CLI 结构化限制。
+发票：
 
-## 深度操作参考
-- 查看 module 字段定义：`cordys raw GET /settings/fields?module={模块}`
-- 调整排序/过滤：在 `filters` 里填 `[{"field":"Stage","operator":"equals","value":"Closed Won"}]`
-- 分页参数：`current`, `pageSize`, `viewId`, `keyword`
+```bash
+cordys crm page invoice
+```
 
-详细结构请参考 `references/crm-api.md`。
+---
 
-## 进一步自动化
-你可以把自然语言请求封装成 cron 任务或脚本：
+# 深度 API 调用
+
+查看字段
+
+```bash
+cordys raw GET /settings/fields?module=account
+```
+
+复杂过滤示例：
+
+```bash
+cordys crm search opportunity '{"filters":[{"field":"Stage","operator":"equals","value":"Closed Won"}]}'
+```
+
+详细结构参考：
+
+```
+references/crm-api.md
+```
+
+---
+
+# 自动化
+
+示例：
+
 ```python
-# 每天早上 9 点看今天成交商机
 cron.add({
   "name": "每天成交商机",
   "schedule": {"kind": "cron", "expr": "0 9 * * *"},
-  "sessionTarget": "isolated",
   "payload": {
     "kind": "agentTurn",
-    "message": "cd /work/CordysCRM-skills && cordys crm page opportunity \"{\"current\":1,\"pageSize\":30,\"keyword\":\"Closed Won\"}\""
+    "message": "c rdys crm page opportunity \"Closed Won\""
   }
 })
 ```

@@ -95,15 +95,13 @@ CORDYS_CRM_DOMAIN=https://crm.example.com
 
 # Shell CLI（默认）
 
-无需额外依赖，仅需要 `curl`。
-
-使用示例：
+无需额外依赖，仅需要 `curl`，使用示例：
 
 ```bash
-./bin/cordys crm page lead
-./bin/cordys crm page opportunity
-./bin/cordys crm org
-./bin/cordys help
+cordys crm page lead
+cordys crm page opportunity
+cordys crm org
+cordys help
 ```
 
 优势：
@@ -114,10 +112,7 @@ CORDYS_CRM_DOMAIN=https://crm.example.com
 
 ---
 
-如果命令包含复杂 JSON 或高级参数，Shell CLI 可能不支持。
-
-CLI 会提示：
-
+如果系统不支持 Bash ｜ Windows 环境 ｜ Shell CLI 不可用，则提示：
 ```
 ⚠️ 当前命令 Shell CLI 不支持
 
@@ -163,8 +158,6 @@ python3 bin/cordys.py help
 ---
 
 # 验证安装
-
-运行：
 
 ```bash
 cordys help

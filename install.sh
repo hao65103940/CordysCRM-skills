@@ -8,8 +8,8 @@ INSTALL_DIR="$HOME/.openclaw/workspace/skills/cordys-crm"
 LATEST_TAG=$(curl -s https://api.github.com/repos/1Panel-dev/CordysCRM-skills/releases/latest | jq -r .tag_name)
 
 # 检查是否成功获取到最新的标签
-if [ -z "$LATEST_TAG" ]; then
-  echo "无法获取最新的版本标签，请检查网络或 GitHub API。"
+if [ "$LATEST_TAG" == "null" ] || [ -z "$LATEST_TAG" ]; then
+  echo "无法获取最新的版本标签，可能是仓库没有发布版本。请检查 GitHub 仓库的发布设置。"
   exit 1
 fi
 

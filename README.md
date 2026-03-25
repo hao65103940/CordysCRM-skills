@@ -246,6 +246,8 @@ Cordys CRM 部分资源属于二级模块。
  `cordys crm page invoice`：查询发票的分页列表，通过 `POST /invoice/page` 获取，每个条件都可以通过 `filters` 精细控制。
  `cordys crm page contract/business-title`：检索工商抬头列表，同样支持关键词/filters。
  `cordys crm page contract/payment-record`：查看回款记录列表，可结合关键词、`filters` 或 `viewId` 进行精细筛选。
+ `cordys crm page pool/lead `：查看线索池中的线索，可结合关键词、`filters` 或 `viewId` 进行精细筛选，关键属性是 `poolId` 通过 lead-pool 接口获取。
+ `cordys crm page pool/account `：查看线索池中的线索，可结合关键词、`filters` 或 `viewId` 进行精细筛选，关键属性是 `poolId` 通过 account-pool 接口获取。
 ```
 
 示例：
@@ -265,7 +267,6 @@ cordys crm page contract/payment-record
 ```bash
 cordys crm page invoice
 ```
-
 ---
 
 # 深度 API 调用

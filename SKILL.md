@@ -10,7 +10,7 @@ description: |
     - 自动构造 filters / sort / combineSearch
     - 自动补充分页默认值
     - 支持“查询全部/全部导出/拉全量”等语义下的自动翻页拉取
-    - 支持二级模块（如 contract/payment-plan）
+    - 支持二级模块（如 contract/payment-plan,pool/account,pool/lead）
 
 ---
 

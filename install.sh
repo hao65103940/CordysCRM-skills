@@ -3,6 +3,7 @@
 # 设置仓库地址和目标安装路径
 REPO_URL="https://github.com/1Panel-dev/CordysCRM-skills"
 INSTALL_DIR="$HOME/.openclaw/workspace/skills/cordys-crm"
+TEMP_DIR="$HOME/.openclaw/workspace/skills/CordysCRM-skills"
 
 # 获取最新的 Git 标签
 LATEST_TAG=$(curl -s https://api.github.com/repos/1Panel-dev/CordysCRM-skills/releases/latest | jq -r .tag_name)
@@ -21,18 +22,22 @@ if [ -d "$INSTALL_DIR" ]; then
   rm -rf "$INSTALL_DIR"
 fi
 
-# 克隆指定版本的 CordysCRM-skills 仓库
-echo "正在克隆 CordysCRM-skills 仓库..."
-git clone --branch "$LATEST_TAG" "$REPO_URL" "$INSTALL_DIR"
+# 克隆指定版本的 CordysCRM-skills 仓库到临时目录
+echo "正在克隆 CordysCRM-skills 仓库到临时目录..."
+git clone --branch "$LATEST_TAG" "$REPO_URL" "$TEMP_DIR"
 
-# 确保复制 skills 目录
-echo "正在覆盖 skills 目录..."
-if [ -d "$INSTALL_DIR/skills" ]; then
-  rm -rf "$INSTALL_DIR/skills"  # 删除已存在的 skills 目录
-  cp -R "$INSTALL_DIR/skills" "$INSTALL_DIR"  # 复制新的 skills 目录
-else
+# 检查是否克隆成功
+if [ ! -d "$TEMP_DIR/skills" ]; then
   echo "错误：克隆的仓库中没有找到 skills 目录。"
   exit 1
 fi
+
+# 复制 skills 目录并重命名到目标目录
+echo "正在将 skills 目录复制到目标目录并重命名..."
+cp -R "$TEMP_DIR/skills" "$INSTALL_DIR"
+
+# 清理临时目录
+echo "清理临时克隆的仓库..."
+rm -rf "$TEMP_DIR"
 
 echo "安装完成！"

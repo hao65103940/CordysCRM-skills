@@ -53,14 +53,14 @@ Python 版本仅在以下情况使用：
 5. 说明期望的输出形式（简短摘要/全部字段/只要某字段）。
 
 ## 指令映射（常用）
-| 场景      | 建议命令                                              | 备注                                                     |
-|---------|---------------------------------------------------|--------------------------------------------------------|
-| 列表或分页查看 | `cordys crm page <module> ["keyword"]`            | 若用户只提关键词，会自动构造 `{keyword:..., current:1, pageSize:30}` |
+| 场景       | 建议命令                                              | 备注                                                     |
+|----------|---------------------------------------------------|--------------------------------------------------------|
+| 列表或分页查看  | `cordys crm page <module> ["keyword"]`            | 若用户只提关键词，会自动构造 `{keyword:..., current:1, pageSize:30}` |
 | 查询全部/拉全量 | `cordys crm page <module> <JSON body>`            | 从 `current=1` 开始循环请求：每取一页先回传该页，再请求下一页，直到无更多数据 |
-| 搜索      | `cordys crm search <module> <JSON body>`          | 需 `combineSearch`、`filters`、`sort`，可补全默认值              |
-| 详情      | `cordys crm get <module> <id>`                    | 直接拉取记录                                                 |
-| 跟进计划或记录 | `cordys crm follow plan 或 record <module> <body>` | `body` 应包含 `sourceId`，计划还需要 `status`/`myPlan` |
-| 原始接口    | `cordys raw <METHOD> <PATH> [<body>]`             | 用于自定义端点或二级模块，如 `/contract/payment-plan`                |
+| 全局搜索     | `cordys crm search <module> <JSON body>`          | 需 `combineSearch`、`filters`、`sort`，可补全默认值              |
+| 详情       | `cordys crm get <module> <id>`                    | 直接拉取记录                                                 |
+| 跟进计划或记录  | `cordys crm follow plan 或 record <module> <body>` | `body` 应包含 `sourceId`，计划还需要 `status`/`myPlan` |
+| 原始接口     | `cordys raw <METHOD> <PATH> [<body>]`             | 用于自定义端点或二级模块，如 `/contract/payment-plan`                |
 
 ## 高级技巧
 - 搜索命令需要完整 JSON，若用户只给关键词或简单条件，可自动补齐 `current=1`、`pageSize=30`、`combineSearch={...}`。

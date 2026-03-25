@@ -53,7 +53,7 @@ curl -fsSL https://raw.githubusercontent.com/1Panel-dev/CordysCRM-skills/main/in
 
 ```bash
 # 克隆 CordysCRM-skills 仓库到 OpenClaw 的 skills 目录 （如果已有同名目录请先备份或删除）版本号可根据需要调整
-git clone --branch v1.0.0 https://github.com/1Panel-dev/CordysCRM-skills ~/.openclaw/workspace/skills/
+git clone --branch main https://github.com/1Panel-dev/CordysCRM-skills ~/.openclaw/workspace/skills/CordysCRM-skills
 # 将克隆的目录重命名为 cordys-crm
 mv ~/.openclaw/workspace/skills/CordysCRM-skills/skills ~/.openclaw/workspace/skills/cordys-crm
 
@@ -83,6 +83,6 @@ cd ~/.openclaw/workspace/skills/cordys-crm
 ./scripts/cordys help
 
 # 运行示例命令，查看线索列表
-./scripts/cordys page lead
+./scripts/cordys crm page lead
 
 ```

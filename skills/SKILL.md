@@ -71,21 +71,15 @@ Python 版本仅在以下情况使用：
 | 跟进计划或记录  | `cordys.sh crm follow plan 或 record <module> <body>` | `body` 应包含 `sourceId`，计划还需要 `status`/`myPlan` |
 | 原始接口     | `cordys raw <METHOD> <PATH> [<body>]`             | 用于自定义端点或二级模块，如 `/contract/payment-plan`                |
 
-## 分页查询交互优化
-为了避免分页查询的交互断层，优先执行一次识别出的指令并返回结果：
-1. **分页控制**：默认 `current=1`、`pageSize=50`，根据响应判断是否有多页，如果有则提示用户是否要翻下一页。
-2. **字段与输出范围**：默认全部字段、摘要、特定字段组合。
-3. **默认格式**：表格或列表形式展示，除非用户特别说明要 JSON 或其他格式。
-
-## 高级技巧
-- 搜索命令需要完整 JSON，若用户只给关键词或简单条件，可自动补齐 `current=1`、`pageSize=50`、`combineSearch={...}`。
-- 过滤器格式为 `{"field":"字段","operator":"equals","value":"值"}`，排序格式为 `{"field":"desc"}`。
-- 支持二级模块（例如 `contract/payment-plan`、`contract/payment-record`），CLI 命令形式仍为 `cordys.sh crm page <module>`。
-- `cordys.sh raw` 可以按原始 GET/POST 访问 `/settings/fields`、`/contract/business-title` 等非标准接口。
-
-
 ## 常用示例
 ```bash
+# 分页查询线索列表（默认分页参数）
+cordys.sh crm page lead
+# 分页查询商机列表（默认分页参数）
+cordys.sh crm page opportunity
+# 分页查询客户列表（默认分页参数）
+cordys.sh crm page account
+
 # 分页列表（带关键词）
 cordys.sh crm page lead "测试"
 
@@ -148,6 +142,18 @@ cordys.sh raw GET /settings/fields?module=account
 ```bash
 cordys.sh crm search opportunity '{"filters":[{"field":"Stage","operator":"equals","value":"Closed Won"}]}'
 ```
+
+## 分页查询交互优化
+为了避免分页查询的交互断层，优先执行一次识别出的指令并返回结果：
+1. **分页控制**：默认 `current=1`、`pageSize=50`，根据响应判断是否有多页，如果有则提示用户是否要翻下一页。
+2. **字段与输出范围**：默认全部字段、摘要、特定字段组合。
+3. **默认格式**：表格或列表形式展示，除非用户特别说明要 JSON 或其他格式。
+
+## 高级技巧
+- 搜索命令需要完整 JSON，若用户只给关键词或简单条件，可自动补齐 `current=1`、`pageSize=50`、`combineSearch={...}`。
+- 过滤器格式为 `{"field":"字段","operator":"equals","value":"值"}`，排序格式为 `{"field":"desc"}`。
+- 支持二级模块（例如 `contract/payment-plan`、`contract/payment-record`），CLI 命令形式仍为 `cordys.sh crm page <module>`。
+- `cordys.sh raw` 可以按原始 GET/POST 访问 `/settings/fields`、`/contract/business-title` 等非标准接口。
 
 ## 助手判断意图的提示词
 - “列表”/“分页查看”：映射到 `page` 指令；可补上关键词或 filters

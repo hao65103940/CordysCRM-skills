@@ -25,9 +25,14 @@ fi
 echo "正在克隆 CordysCRM-skills 仓库..."
 git clone --branch "$LATEST_TAG" "$REPO_URL" "$INSTALL_DIR"
 
-# 强制覆盖 skills 目录
+# 确保复制 skills 目录
 echo "正在覆盖 skills 目录..."
-rm -rf "$INSTALL_DIR/skills"  # 删除已存在的 skills 目录
-cp -R "$INSTALL_DIR/skills" "$INSTALL_DIR"  # 复制新的 skills 目录
+if [ -d "$INSTALL_DIR/skills" ]; then
+  rm -rf "$INSTALL_DIR/skills"  # 删除已存在的 skills 目录
+  cp -R "$INSTALL_DIR/skills" "$INSTALL_DIR"  # 复制新的 skills 目录
+else
+  echo "错误：克隆的仓库中没有找到 skills 目录。"
+  exit 1
+fi
 
 echo "安装完成！"

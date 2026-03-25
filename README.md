@@ -47,7 +47,7 @@ CordysCRM-skills/
 ## 如何在 OpenClaw 中安装
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/1Panel-dev/CordysCRM-skills/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/1Panel-dev/CordysCRM-skills/main/install.sh | bash
 ```
 
 然后确认 `scripts/cordys` 可执行：

@@ -160,3 +160,7 @@ cordys.sh crm search opportunity '{"filters":[{"field":"Stage","operator":"equal
 - CLI 默认读取 `.env`，也可通过前置环境变量覆盖。
 - 若返回 `code` 非 `100200`，要记录 `message` 并向用户说明。
 - 若返回 401 或 403，提示用户检查认证信息。
+
+## 问题反馈
+如有任何问题或建议，请通过以下方式联系我们：
+- GitHub Issues: https://github.com/1Panel-dev/CordysCRM-skills/issues

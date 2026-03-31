@@ -42,7 +42,7 @@ if [ -n "$CRM_DOMAIN" ]; then
 elif [ -n "$CORDYS_CRM_DOMAIN" ]; then
     CRM_DOMAIN="$CORDYS_CRM_DOMAIN"
 else
-    CRM_DOMAIN="https://crm.fit2cloud.com"
+    CRM_DOMAIN="https://your-crm-domain.com"
 fi
 
 if [ -z "$ACCESS_KEY" ] || [ -z "$SECRET_KEY" ]; then

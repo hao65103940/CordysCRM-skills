@@ -18,7 +18,7 @@ vim .env  # 填写 ACCESS_KEY 和 SECRET_KEY
 ```ini
 ACCESS_KEY=你的 AccessKey
 SECRET_KEY=你的 SecretKey
-CRM_DOMAIN=https://crm.fit2cloud.com  # 你的 CRM 域名
+CRM_DOMAIN=https://your-crm-domain.com  # 你的 CRM 域名
 ```
 
 ### 2. 测试连接

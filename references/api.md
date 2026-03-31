@@ -102,7 +102,7 @@ CLI 会在你不提供某些字段时自动填默认值；如果你直接给出 
 
 **请求示例：**
 ```bash
-curl -X GET "https://crm.fit2cloud.com/personal/center/info" \
+curl -X GET "https://your-crm-domain.com/personal/center/info" \
   -H "X-Access-Key: YOUR_ACCESS_KEY" \
   -H "X-Secret-Key: YOUR_SECRET_KEY" \
   -H "Content-Type: application/json"

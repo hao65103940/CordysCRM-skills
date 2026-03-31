@@ -39,7 +39,7 @@
   ```bash
   ACCESS_KEY=your_access_key
   SECRET_KEY=your_secret_key
-  CRM_DOMAIN=https://crm.fit2cloud.com
+  CRM_DOMAIN=https://your-crm-domain.com
   ```
 
 ### 2. 配置说明

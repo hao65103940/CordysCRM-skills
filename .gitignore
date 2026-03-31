@@ -3,7 +3,6 @@
 
 # 公司自定义配置（不上传）
 config/company.json
-rules/company/*.md
 
 # 备份文件
 *.backup

@@ -83,9 +83,9 @@ SKILL.md (边界定义)
 
 ```bash
 # 基础查询
-cordys crm page <module> [params]
-cordys crm search <module> [params]
-cordys crm get <module> <id>
+cordys crm page <module> [params]      # 权限内高级查询
+cordys crm search <module> [params]    # 全局搜索（固定字段）
+cordys crm get <module> <id>           # 获取单条记录
 
 # 跟进管理
 cordys crm follow plan <module> [params]
@@ -99,6 +99,17 @@ cordys crm contact <module> <id>
 # 原始 API
 cordys raw <METHOD> <PATH> [body]
 ```
+
+### search vs page 区别
+
+| 命令 | 用途 | 权限 | 支持字段 |
+|------|------|------|---------|
+| `search` | 全局搜索 | 无权限限制 | 仅固定字段（名称/电话等） |
+| `page` | 高级查询 | **个人权限内** | 任意字段（产品/区域/阶段等） |
+
+**简单记：**
+- `search` → 搜**固定字段**（公司名/手机号），全局搜索
+- `page` → 查**个人权限内**数据，支持高级过滤
 
 ### 模块别名
 

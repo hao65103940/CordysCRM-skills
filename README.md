@@ -3,304 +3,223 @@
 像与人交谈一样与你的 **Cordys CRM 工作区**交互。  
 商机、联系人、潜在客户 —— 全部通过自然对话与你的 AI 助理完成。
 
-这个 Skill 将 **Cordys CRM CLI** 包装进 **OpenClaw 会话环境**：
-
-1. 你用自然语言描述需求
-2. AI 解析意图
-3. 自动转换为 `cordys` CLI 命令
-4. 执行 API 请求并返回结果
-
-借助 Prompt 的动态调优机制，用户可以在 **不修改任何代码**的情况下控制：
-
-- 输出格式
-- 过滤条件
-- 排序规则
-- 分页逻辑
-
-从而让 AI 更贴合真实 CRM 业务场景。
-
 ---
 
-# 为什么这个 Skill 有用
+## ⚡ 5 分钟快速开始
 
-| 系统视角 | 用户意图 | 输出 |
-|---|---|---|
-| 👂 监听自然语言 | 提供模块 / 条件 / 字段 | ⚙️ 转换为 CLI / API 请求 |
-| 📦 简化重复任务 | 分页 / 搜索 / CRUD | ✅ 自动执行 |
-| 📊 数据同步 | 查看销售管道 / 客户数据 | 🕓 可结合 cron 自动化 |
-
----
-
-# 项目结构
-
-```
-CordysCRM-skills/
-├── README.md              # 当前工程基本说明
-├── SKILL.md               # 助手在 OpenClaw 会话里引用的 prompt/reference
-├── bin/cordys             # 内置 CLI，可直接试用
-└── references/
-    └── crm-api.md         # API 字段和请求体 RFC
-```
-
-快速安装
+### 1. 配置环境变量
 
 ```bash
-git clone https://github.com/1Panel-dev/CordysCRM-skills ~/.openclaw/workspace/skills/cordys-crm
+cp .env.example .env
+vim .env  # 填写 ACCESS_KEY 和 SECRET_KEY
 ```
 
----
-
-# 配置环境变量
-
-创建 `.env`
-
+**环境变量说明：**
 ```ini
-CORDYS_ACCESS_KEY=你的AccessKey
-CORDYS_SECRET_KEY=你的SecretKey
-CORDYS_CRM_DOMAIN=https://你的域名
+ACCESS_KEY=你的 AccessKey
+SECRET_KEY=你的 SecretKey
+CRM_DOMAIN=https://crm.fit2cloud.com  # 你的 CRM 域名
 ```
 
-示例：
-
-```
-CORDYS_CRM_DOMAIN=https://crm.example.com
-```
-
----
-
-# CLI 版本说明
-
-项目提供 **两个 CLI 实现**
-
-| CLI | 推荐场景               | 特点     |
-|---|--------------------|--------|
-| Shell CLI (`cordys`) | Linux / macOS / CI | 默认 CLI |
-| Python CLI (`cordys.py`) | 跨平台 / 复杂命令         | 灵活     |
-
-默认 **优先使用 Shell CLI**。
-
-如果 Shell CLI 不支持某些命令，会提示使用 Python CLI。
-
----
-
-# Shell CLI（默认）
-
-无需额外依赖，仅需要 `curl`，使用示例：
+### 2. 测试连接
 
 ```bash
 cordys crm page lead
-cordys crm page opportunity
-cordys crm org
-cordys help
 ```
 
-优势：
+如果返回 JSON 数据说明配置成功。
 
-- 无需 Python
-- 启动速度快
-- 适合 Linux / macOS / CI
+### 3. 开始查询
 
----
+```bash
+# 查线索列表
+cordys crm page lead
 
-如果系统不支持 Bash ｜ Windows 环境 ｜ Shell CLI 不可用，则提示：
-```
-⚠️ 当前命令 Shell CLI 不支持
+# 搜公司名
+cordys crm search lead "公司名"
 
-请使用 Python CLI：
-
-python3 bin/cordys.py <command>
-```
-
-示例：
-
-```
-cordys crm search opportunity '{...}'
-
-⚠️ 当前命令 Shell CLI 不支持
-
-请使用：
-
-python3 bin/cordys.py crm search opportunity '{...}'
+# 查我的商机
+cordys crm page opportunity '{"owner":"你的用户 ID"}'
 ```
 
 ---
 
-# Python CLI（完整版本）
+## 📁 项目结构
 
-安装依赖：
-
-```bash
-pip install requests python-dotenv
 ```
-
-使用示例：
-
-```bash
-python3 bin/cordys.py crm page lead
-python3 bin/cordys.py crm org
-python3 bin/cordys.py help
+cordys-crm-new/
+├── bin/                    # CLI 工具（Shell/Node.js/Python 三版本）
+├── references/             # 通用文档（任何公司都需要）
+│   ├── api.md              # API 接口参考 + search/page 规则
+│   ├── fields.md           # 字段映射表
+│   └── sync.md             # 字段同步指南
+├── rules/                  # 规则系统
+│   ├── platform/           # 平台级规则（通用，不需要改）
+│   └── company/            # 公司级规则（需要替换成自己的）
+│       ├── README.md       # 替换说明
+│       ├── region.md       # 区域映射
+│       ├── query-scenarios.md  # 查询场景
+│       └── glossary.md     # 术语映射
+├── scripts/                # 同步脚本 + Cron 配置
+├── SKILL.md                # OpenClaw 技能定义
+├── README.md               # 当前文档
+└── .env.example            # 环境变量模板
 ```
-
-优势：
-- 更好的错误处理
-- 跨平台支持
 
 ---
 
-# 验证安装
+## 🏢 其他公司如何使用
 
+### 通用能力（不需要改）
+
+- ✅ `references/api.md` - API 接口参考
+- ✅ `references/fields.md` - 字段映射表
+- ✅ `bin/` - CLI 工具
+- ✅ `scripts/` - 同步脚本
+
+### 需要替换的内容
+
+**`rules/company/` 目录下的文件需要替换成你们自己的规则：**
+
+1. `region.md` - 区域映射（如华北/华东/华南）
+2. `query-scenarios.md` - 查询场景（如关联查询逻辑）
+3. `glossary.md` - 术语映射（如产品简称）
+
+**替换步骤：**
 ```bash
-cordys help
+# 1. 删除飞致云的规则
+rm rules/company/*.md
+
+# 2. 创建你们自己的规则
+vim rules/company/region.md
+vim rules/company/query-scenarios.md
+vim rules/company/glossary.md
 ```
 
-或者
-
-```bash
-python3 bin/cordys.py help
-```
-
-如果返回帮助信息说明安装成功。
+**如果不想用公司级规则：**
+- 删除 `rules/company/` 目录下所有文件
+- 所有查询都使用通用规则
 
 ---
 
-# CLI 常用命令
+## 🔧 CLI 工具
 
-分页列表
+项目提供三个 CLI 版本：
+
+| CLI | 推荐场景 | 依赖 |
+|-----|---------|------|
+| `cordys` (Shell) | **推荐** - Linux/macOS/CI | `curl` |
+| `cordys.js` (Node.js) | 跨平台 | `Node.js` |
+| `cordys.py` (Python) | 备用 | `Python3 + requests` |
+
+**默认优先使用 Shell 版本。**
+
+---
+
+## 📚 常用命令
 
 ```bash
+# 分页列表
 cordys crm page lead
 cordys crm page opportunity
 cordys crm page account
-```
 
-关键词搜索
+# 关键词搜索
+cordys crm search lead "公司名"
 
-```bash
-cordys crm page lead "测试"
-```
-
-获取单条记录
-
-```bash
+# 获取单条记录
 cordys crm get lead "123456"
-```
 
-复杂搜索
+# 跟进计划/记录
+cordys crm follow plan lead '{"sourceId":"xxx","status":"ALL"}'
+cordys crm follow record account '{"sourceId":"xxx"}'
 
-```bash
-cordys crm search opportunity '{"cupytnt":1,"pageSize":30,"keyword":"测试"}'
-```
-
-组织架构
-
-```bash
-cordys crm org
-```
-
-部门成员
-
-```bash
-cordys crm members '{"current":1,"pageSize":50,"departmentIds":["dept1"]}'
-```
-
-联系人查询
-
-```bash
-# 查询 客户｜商机 联系人
-cordys crm contact opportunity '商机id'
-cordys crm contact account '客户id'
-```
-
-原始 API
-
-```bash
-cordys raw GET /settings/fields?cordys raw GET /setting---
-```
-
-# 跟进计划与记录（通用查询）
-
-示例：
-
-```bash
-cordys crm follow plan lead '{"sourceId":"927627065163785","current":1,"pageSize":10,"keyword":"","status":"ALL","myPlan":false}'
-
-cordys crm follow record account '{"sourceId":"1751888184018919","current":1,"pageSize":10,"keyword":"","myPlan":false}'
-```
-
-- `sourceId` 指向某条商机/客户/线索的唯一 ID，必须传入才能拉到与之关联的计划或记录；只提供 `keyword` 时只做关键字模糊搜索，无法替代 `sourceId`。
-- `status` 面向 `plan` 接口，支持 `ALL`、`UNFINISHED`、`FINISHED` 等（以 Cordys 枚举为准），用来控制计划流转；`myPlan` 控制是否只看本人创建的计划。
-- `page_payload` 默认只补齐 `current/pageSize/sort/filters`，所以当你希望筛选特定 `sourceId`/`status`/`myPlan`，必须以 JSON body 形式传入完整字段。
-
-默认情况下，如果你只提供关键词，CLI 会自动补齐分页结构（current=1、pageSize=30、sort={}、filters=[]）。
-
----
-
-# 二级模块支持
-
-Cordys CRM 部分资源属于二级模块。
-
-例如：
-
-```
- `cordys crm page contract/payment-plan`：查询回款计划的分页列表，支持传入关键词/JSON body，实际上调用的是 `POST /contract/payment-plan/page`。
- `cordys crm page invoice`：查询发票的分页列表，通过 `POST /invoice/page` 获取，每个条件都可以通过 `filters` 精细控制。
- `cordys crm page contract/business-title`：检索工商抬头列表，同样支持关键词/filters。
- `cordys crm page contract/payment-record`：查看回款记录列表，可结合关键词、`filters` 或 `viewId` 进行精细筛选。
-```
-
-示例：
-
-```bash
+# 二级模块
 cordys crm page contract/payment-plan
-```
-
-回款记录：
-
-```bash
-cordys crm page contract/payment-record
-```
-
-发票：
-
-```bash
 cordys crm page invoice
-```
 
----
-
-# 深度 API 调用
-
-查看字段
-
-```bash
+# 原始 API
 cordys raw GET /settings/fields?module=account
 ```
 
-复杂过滤示例：
+---
+
+## 🤖 自动化
+
+### OpenClaw Cron
 
 ```bash
-cordys crm search opportunity '{"filters":[{"field":"Stage","operator":"equals","value":"Closed Won"}]}'
+openclaw cron add --file scripts/openclaw-cron.json
 ```
 
-详细结构参考：
+### Systemd Timer（Linux）
 
+```bash
+sudo cp scripts/systemd/*.service /etc/systemd/system/
+sudo cp scripts/systemd/*.timer /etc/systemd/system/
+sudo systemctl enable crm-fields-sync.timer
 ```
-references/crm-api.md
+
+### Crontab
+
+```bash
+crontab scripts/cron-example
 ```
 
 ---
 
-# 自动化
+## 📖 文档导航
 
-示例：
+| 文档 | 说明 |
+|------|------|
+| `references/api.md` | API 接口参考 + search/page 规则 + "我的"查询 |
+| `references/fields.md` | 字段映射表（线索/客户/商机/产品） |
+| `references/sync.md` | 字段同步指南 |
+| `rules/company/README.md` | 公司级规则替换说明 |
+| `SKILL.md` | OpenClaw 技能定义 + CLI 命令映射 |
 
-```python
-cron.add({
-  "name": "每天成交商机",
-  "schedule": {"kind": "cron", "expr": "0 9 * * *"},
-  "payload": {
-    "kind": "agentTurn",
-    "message": "c rdys crm page opportunity \"Closed Won\""
-  }
-})
+---
+
+## 🚀 进阶使用
+
+### 查询"我的线索"
+
+```bash
+# 步骤 1: 获取当前用户 ID
+cordys raw GET /personal/center/info | jq '.data.userId'
+
+# 步骤 2: 查我的线索
+cordys crm page lead '{"owner":"你的用户 ID"}'
 ```
+
+### 按时间范围查询
+
+```bash
+# 本周创建的线索
+cordys crm page lead '{
+  "combineSearch": {
+    "conditions": [
+      {"name": "createTime", "operator": "DYNAMICS", "value": "WEEK"}
+    ]
+  }
+}'
+```
+
+### 全量查询（自动翻页）
+
+当用户说"查全部线索"、"拉全量数据"时，CLI 会自动翻页直到查完所有数据。
+
+---
+
+## 📝 版本信息
+
+- **Skill 版本**：2.0.0
+- **最后更新**：2026-03-31
+- **兼容 CRM 版本**：Cordys CRM 2026.x
+
+---
+
+## 📞 支持
+
+- **上游仓库**：https://github.com/hao65103940/CordysCRM-skills
+- **问题反馈**：https://github.com/hao65103940/CordysCRM-skills/issues

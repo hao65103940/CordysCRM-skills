@@ -53,16 +53,53 @@ CLI 会在你不提供某些字段时自动填默认值；如果你直接给出 
 ---
 
 ## 3. 常用 HTTP 端点
+
 | 方法 | 路径 | 说明 |
 | --- | --- | --- |
 | `GET` | `/{module}/view/view` | 获取视图列表。 |
 | `GET` | `/{module}/{id}` | 获取单条记录详情。 |
-| `POST` | `/{module}/page` | **高级查询**：支持任意字段过滤、复杂条件组合。 |
+| `POST` | `/{module}/page` | **高级查询**：支持任意字段过滤、复杂条件组合（权限内）。 |
 | `POST` | `/global/search/{module}` | **全局搜索**：仅搜索配置好的基础字段（名称、电话等）。 |
 | `GET` | `/personal/center/info` | **获取当前用户信息**（通过 API Key 认证）。 |
 | `GET` | `/search/config/get` | **获取搜索配置**：查看各模块支持的全局搜索字段。 |
 
 > `cordys raw {METHOD} {PATH}` 就是让你任意组合上述请求，并手动填写 body/headers。
+
+---
+
+### 3.1 获取全局搜索字段配置
+
+**接口：** `GET /search/config/get`
+
+**用途：** 查看各模块支持全局搜索的字段 ID（`search` 命令只能搜这些字段）
+
+**请求示例：**
+```bash
+cordys raw GET /search/config/get
+```
+
+**响应示例：**
+```json
+{
+  "code": 100200,
+  "data": {
+    "searchFields": {
+      "searchAdvancedClue": ["1751888184000013", "1751888184000021"],
+      "searchAdvancedCustomer": ["1751888184000002"],
+      "searchAdvancedOpportunity": ["1751888184000029", "1751888184000037"],
+      "searchAdvancedContact": ["1751888184000050", "1751888184000054"]
+    }
+  }
+}
+```
+
+**字段映射：**
+- `searchAdvancedClue` → 线索（lead）可搜索字段
+- `searchAdvancedCustomer` → 客户（account）可搜索字段
+- `searchAdvancedOpportunity` → 商机（opportunity）可搜索字段
+- `searchAdvancedContact` → 联系人（contact）可搜索字段
+
+**注意：** 字段 ID 需要通过 `/settings/fields?module={module}` 进一步查询具体字段名。
 
 ---
 
@@ -133,7 +170,7 @@ cordys crm page opportunity '{
 
 ---
 
-## 3.1 获取当前用户信息
+### 3.2 获取当前用户信息
 
 **接口：** `GET /personal/center/info`
 

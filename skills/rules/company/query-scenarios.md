@@ -127,6 +127,6 @@ jq '[.data.list[] | select(.products | if . == null then false else (. | map(. |
 
 ## 📖 相关文档
 
-- `references/api.md` - API 接口参考
+- `references/crm-api.md` - API 接口参考
 - `rules/platform/fields.md` - 字段映射表
 - `rules/company/region.md` - 区域映射规则

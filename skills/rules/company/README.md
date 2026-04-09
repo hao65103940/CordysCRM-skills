@@ -76,6 +76,6 @@
 
 ## 相关文档
 
-- `references/api.md` - API 接口参考（通用）
+- `references/crm-api.md` - API 接口参考（通用）
 - `rules/platform/fields.md` - 字段映射表（通用）
 - `rules/platform/README.md` - 平台级规则说明

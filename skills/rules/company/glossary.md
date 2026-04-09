@@ -89,6 +89,6 @@ jq '[.data.list[] | select(.amount != null and .amount > 500000)]'
 
 ## 📖 相关文档
 
-- `references/api.md` - API 接口参考
+- `references/crm-api.md` - API 接口参考
 - `rules/platform/fields.md` - 字段映射表
 - `rules/company/query-scenarios.md` - 查询场景示例

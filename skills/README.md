@@ -156,7 +156,7 @@ crontab -e
 
 | 文档 | 说明 |
 |------|------|
-| `references/api.md` | API 接口参考 + search/page 规则 + "我的"查询 |
+| `references/crm-api.md` | API 接口参考 + search/page 规则 + "我的"查询 |
 | `rules/platform/fields.md` | 字段映射表（线索/客户/商机/产品） |
 | `rules/platform/sync.md` | 字段同步指南 |
 | `rules/company/README.md` | 公司级规则替换说明 |

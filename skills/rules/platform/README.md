@@ -37,6 +37,6 @@
 
 ## 相关文档
 
-- `references/api.md` - API 接口参考
+- `references/crm-api.md` - API 接口参考
 - `rules/platform/fields.md` - 字段映射表
 - `rules/company/README.md` - 公司级规则说明

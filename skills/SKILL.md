@@ -267,7 +267,7 @@ jq '[.data.list[] | select(.amount != null and .amount > 500000)]'
 ### 核心文档
 | 文档 | 说明 |
 |------|------|
-| `references/api.md` | **API 接口参考** + 查询语法 + **全量查询最佳实践** |
+| `references/crm-api.md` | **API 接口参考** + 查询语法 + **全量查询最佳实践** |
 | `rules/platform/fields.md` | 字段映射说明 |
 | `rules/platform/sync.md` | 字段同步配置指南 |
 | `rules/company/README.md` | 公司级规则说明 |

@@ -107,4 +107,4 @@ cordys crm page opportunity '{"filters":[{"name":"1751888184000030","operator":"
 
 - `rules/platform/fields.md` - 字段映射说明（区域字段 ID）
 - `rules/company/query-scenarios.md` - 查询场景示例
-- `references/api.md` - API 接口参考
+- `references/crm-api.md` - API 接口参考

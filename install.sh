@@ -80,24 +80,21 @@ if ! command -v curl &> /dev/null; then
 fi
 print_success "curl 已安装"
 
-# 步骤 2：下载脚本
-print_step "步骤 2/5：下载安装脚本"
+# 步骤 2：克隆仓库
+print_step "步骤 2/5：克隆仓库"
 
-echo "正在从 GitHub 下载..."
-if ! curl -fsSL "$REPO_URL/tarball/$BRANCH" -o "$TEMP_DIR.tar.gz" 2>/dev/null; then
-    print_error "下载失败，请检查网络连接"
+echo "正在从 GitHub 克隆仓库..."
+if ! git clone --depth 1 --branch "$BRANCH" "$REPO_URL" "$TEMP_DIR" 2>/dev/null; then
+    print_error "克隆失败，请检查网络连接"
     echo "   仓库地址：$REPO_URL"
     echo "   分支：$BRANCH"
+    echo ""
+    echo "   可以尝试："
+    echo "   git clone --depth 1 --branch $BRANCH $REPO_URL /tmp/cordys-crm-manual"
+    echo "   cp -r /tmp/cordys-crm-manual/skills ~/.openclaw/skills/cordys-crm"
     exit 1
 fi
-print_success "脚本下载完毕"
-
-# 解压
-echo "正在解压文件..."
-mkdir -p "$TEMP_DIR"
-tar -xzf "$TEMP_DIR.tar.gz" -C "$TEMP_DIR" --strip-components=1
-rm -f "$TEMP_DIR.tar.gz"
-print_success "文件解压完成"
+print_success "仓库克隆成功"
 
 # 步骤 3：检查目录结构
 print_step "步骤 3/5：检查目录结构"
